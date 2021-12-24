@@ -9,9 +9,6 @@
 .history
 .svn/
 
-# Temp
-assets/
-
 # IntelliJ related
 *.iml
 *.ipr
@@ -32,6 +29,7 @@ assets/
 .packages
 .pub-cache/
 .pub/
+/web/json/
 /build/*
 !/build/web/
 
