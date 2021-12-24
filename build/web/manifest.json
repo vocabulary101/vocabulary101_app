@@ -1,7 +1,7 @@
 {
     "name": "vocabulary101_app",
     "short_name": "vocabulary101_app",
-    "start_url": ".",
+    "start_url": "https://vocabulary101.com",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
