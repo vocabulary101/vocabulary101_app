@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:typed_data';
-import 'dart:ui';
 
 import 'package:archive/archive.dart';
 import 'package:blur/blur.dart';
@@ -10,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:soundpool/soundpool.dart';
 import 'package:vocabulary101_app/app/core/icons/v101_icons.dart';
+import 'package:vocabulary101_app/app/modules/home/controllers/home_controller.dart';
 import 'package:vocabulary101_app/app/widgets/circle_icon_button.dart';
 
 class ItemCard extends StatelessWidget {
@@ -21,11 +21,14 @@ class ItemCard extends StatelessWidget {
       future: tempCardData(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          // return FrontCard(
-          //   data: snapshot.data!,
-          // );
-          return BackCard(
-            data: snapshot.data!,
+          return Obx(
+            () => !HomeController.to.isCardBackSide.value
+                ? FrontCard(
+                    data: snapshot.data!,
+                  )
+                : BackCard(
+                    data: snapshot.data!,
+                  ),
           );
         } else {
           return Container();
@@ -180,7 +183,9 @@ class FrontCard extends StatelessWidget {
               highlightColor: const Color(0xFF4D8EDA).withOpacity(.11),
               splashColor: const Color(0xFF4D8EDA).withOpacity(.14),
               focusColor: const Color(0xFF4D8EDA).withOpacity(.2),
-              onPressed: () {},
+              onPressed: () {
+                HomeController.to.isCardBackSide.value = true;
+              },
             ),
           ),
         ],
@@ -458,7 +463,7 @@ class BackCard extends StatelessWidget {
                     minimumSize: Size.zero,
                   ),
                   onPressed: () {
-                    //
+                    HomeController.to.isCardBackSide.value = false;
                   },
                 ),
                 const SizedBox(width: 10),
@@ -484,7 +489,7 @@ class BackCard extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    //
+                    HomeController.to.isCardBackSide.value = false;
                   },
                 ),
                 const SizedBox(width: 10),
@@ -510,7 +515,7 @@ class BackCard extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    //
+                    HomeController.to.isCardBackSide.value = false;
                   },
                 ),
                 const SizedBox(width: 10),
@@ -536,7 +541,7 @@ class BackCard extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    //
+                    HomeController.to.isCardBackSide.value = false;
                   },
                 ),
               ],

@@ -51,7 +51,9 @@ void main() async {
   // runApp(App());
   runApp(
     GetMaterialApp.router(
-      title: GetPlatform.isWeb ? 'Video Notes and Bookmarks - Uolia' : 'Uolia',
+      title: GetPlatform.isWeb
+          ? 'English Vocabulary - Vocabulary101'
+          : 'Vocabulary101',
       getPages: AppPages.routes,
       unknownRoute: AppPages.routes.firstWhere(
         (p) => p.name == Routes.NOT_FOUND,
