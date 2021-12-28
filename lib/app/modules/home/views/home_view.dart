@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:vocabulary101_app/app/core/icons/v101_icons.dart';
-import 'package:vocabulary101_app/app/modules/home/widgets/item_card.dart';
+import 'package:vocabulary101_app/app/modules/home/widgets/session_card_view.dart';
+import 'package:vocabulary101_app/app/modules/home/widgets/no_learning_session_msg.dart';
 import 'package:vocabulary101_app/app/widgets/circle_icon_button.dart';
 
 import '../controllers/home_controller.dart';
@@ -52,7 +53,11 @@ class HomeView extends GetView<HomeController> {
           ),
         ],
       ),
-      body: const ItemCard(),
+      body: Obx(
+        () => HomeController.to.currentLearningSession.value == null
+            ? const NoLearningSessionMsg()
+            : const SessionCardView(),
+      ),
     );
   }
 }

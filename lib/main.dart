@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:vocabulary101_app/app/controllers/app_user_controller.dart';
 import 'package:vocabulary101_app/app/core/themes/light_theme.dart';
 import 'package:vocabulary101_app/app/routes/app_pages.dart';
 
@@ -18,18 +19,19 @@ void main() async {
 
   if (kIsWeb) {
     await Hive.openBox('users');
-    await Hive.openBox('libraries');
-    await Hive.openBox('resources');
-    // await Hive.openBox('userActivityLog');
+    await Hive.openBox('staticCardsCache');
+    await Hive.openBox('learningSessions');
+    await Hive.openBox('viewedSessionCards');
   } else {
     // Directory appDocDir = await getApplicationDocumentsDirectory();
     Directory appDocDir = await getApplicationSupportDirectory();
     String appDocPath = appDocDir.path;
+    print(appDocPath);
 
     await Hive.openBox('users', path: appDocPath);
-    await Hive.openBox('libraries', path: appDocPath);
-    await Hive.openBox('resources', path: appDocPath);
-    // await Hive.openBox('userActivityLog', path: appDocPath);
+    await Hive.openBox('staticCardsCache', path: appDocPath);
+    await Hive.openBox('learningSessions', path: appDocPath);
+    await Hive.openBox('viewedSessionCards', path: appDocPath);
   }
 
   // await Firebase.initializeApp();
@@ -39,11 +41,11 @@ void main() async {
   //   tag: 'auth',
   //   permanent: true,
   // );
-  // await Get.putAsync(
-  //   () async => await AppUserController().init(),
-  //   tag: 'user',
-  //   permanent: true,
-  // );
+  await Get.putAsync(
+    () async => await AppUserController().init(),
+    tag: 'user',
+    permanent: true,
+  );
 
   // Init Google Analytics
   // FirebaseAnalytics analytics = FirebaseAnalytics();

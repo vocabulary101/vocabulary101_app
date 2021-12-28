@@ -1,78 +1,66 @@
-import 'dart:convert';
-import 'dart:typed_data';
-
-import 'package:archive/archive.dart';
-import 'package:blur/blur.dart';
 import 'package:flutter/material.dart';
+import 'package:blur/blur.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 import 'package:soundpool/soundpool.dart';
+
 import 'package:vocabulary101_app/app/core/icons/v101_icons.dart';
 import 'package:vocabulary101_app/app/modules/home/controllers/home_controller.dart';
 import 'package:vocabulary101_app/app/widgets/circle_icon_button.dart';
 
-class ItemCard extends StatelessWidget {
-  const ItemCard({Key? key}) : super(key: key);
+class SessionCardView extends StatelessWidget {
+  const SessionCardView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Map<String, dynamic>>(
-      future: tempCardData(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return Obx(
-            () => !HomeController.to.isCardBackSide.value
-                ? FrontCard(
-                    data: snapshot.data!,
-                  )
-                : BackCard(
-                    data: snapshot.data!,
-                  ),
-          );
-        } else {
-          return Container();
-        }
-      },
+    return Obx(
+      () => HomeController.to.currentStaticCard.value == null
+          ? const LoadingCard()
+          : !HomeController.to.isCardBackSide.value
+              ? const FrontCard()
+              : const BackCard(),
     );
   }
+}
 
-  Future<Map<String, dynamic>> tempCardData() async {
-    var url = Uri.parse((GetPlatform.isWeb ? '' : 'https://vocabulary101.com') +
-        '/json/en/cards/0.json');
+class LoadingCard extends StatelessWidget {
+  const LoadingCard({Key? key}) : super(key: key);
 
-    // Await the http get response, then decode the json-formatted response.
-    var response = await http.get(url);
-    if (response.statusCode == 200) {
-      final gzipBytes = response.bodyBytes;
-
-      var stringBytes = GZipDecoder().decodeBytes(gzipBytes);
-
-      var jsonString = utf8.decode(stringBytes);
-
-      return Map<String, dynamic>.from(
-        json.decode(jsonString),
-      );
-    } else {
-      // print('Request failed with status: ${response.statusCode}.');
-      return {};
-    }
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
+      color: Colors.white,
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: const [
+          SizedBox(
+            width: 60,
+            height: 60,
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+            ),
+          ),
+          SizedBox(
+            width: double.infinity,
+            height: 30,
+          ),
+          Text('Loading Card'),
+        ],
+      ),
+    );
   }
 }
 
 class FrontCard extends StatelessWidget {
-  final Map<String, dynamic> data;
-
-  const FrontCard({
-    Key? key,
-    required this.data,
-  }) : super(key: key);
+  const FrontCard({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final word = data['a'];
-    final ipa = data['d'];
-    final Uint8List wordAudioBytes = base64Decode(data['e'].toString());
+    final staticCard = HomeController.to.currentStaticCard.value!;
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 6),
@@ -113,7 +101,9 @@ class FrontCard extends StatelessWidget {
               ),
               IconButton(
                 icon: const Icon(V101Icons.more_vert),
-                onPressed: () {},
+                onPressed: () async {
+                  await HomeController.to.cancelLearningSession();
+                },
               )
             ],
           ),
@@ -127,7 +117,7 @@ class FrontCard extends StatelessWidget {
                     height: 80,
                   ),
                   Text(
-                    word,
+                    staticCard.term,
                     style: const TextStyle(fontSize: 48),
                   ),
                   const SizedBox(height: 30),
@@ -150,14 +140,14 @@ class FrontCard extends StatelessWidget {
                       );
 
                       int soundId = await pool.load(
-                        wordAudioBytes.buffer.asByteData(),
+                        staticCard.termAudioBytes.buffer.asByteData(),
                       );
                       await pool.play(soundId);
                     },
                   ),
                   const SizedBox(height: 60),
                   Text(
-                    ipa,
+                    staticCard.ipa,
                     style: const TextStyle(
                       fontSize: 28,
                       fontFamily: 'NotoSansMono',
@@ -195,31 +185,28 @@ class FrontCard extends StatelessWidget {
 }
 
 class BackCard extends StatelessWidget {
-  final Map<String, dynamic> data;
-
-  const BackCard({
-    Key? key,
-    required this.data,
-  }) : super(key: key);
+  const BackCard({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final word = data['a'];
-    final meaning = (data['b'] as String)
-        .replaceAll('<i>', '*')
-        .replaceAll('</i>', '*')
-        .replaceAll('<b>', '**')
-        .replaceAll('</b>', '**');
-    final example = (data['c'] as String)
-        .replaceAll('<i>', '*')
-        .replaceAll('</i>', '*')
-        .replaceAll('<b>', '**')
-        .replaceAll('</b>', '**');
-    // final ipa = data['d'];
-    final Uint8List wordAudioBytes = base64Decode(data['e'].toString());
-    final Uint8List meaningAudioBytes = base64Decode(data['f'].toString());
-    final Uint8List exampleAudioBytes = base64Decode(data['g'].toString());
-    final Uint8List photoBytes = base64Decode(data['h'].toString());
+    final staticCard = HomeController.to.currentStaticCard.value!;
+
+    // final word = data['a'];
+    // final meaning = (data['b'] as String)
+    //     .replaceAll('<i>', '*')
+    //     .replaceAll('</i>', '*')
+    //     .replaceAll('<b>', '**')
+    //     .replaceAll('</b>', '**');
+    // final example = (data['c'] as String)
+    //     .replaceAll('<i>', '*')
+    //     .replaceAll('</i>', '*')
+    //     .replaceAll('<b>', '**')
+    //     .replaceAll('</b>', '**');
+    // // final ipa = data['d'];
+    // final Uint8List wordAudioBytes = base64Decode(data['e'].toString());
+    // final Uint8List meaningAudioBytes = base64Decode(data['f'].toString());
+    // final Uint8List exampleAudioBytes = base64Decode(data['g'].toString());
+    // final Uint8List photoBytes = base64Decode(data['h'].toString());
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 6),
@@ -236,14 +223,14 @@ class BackCard extends StatelessWidget {
                     blur: 5,
                     blurColor: Colors.black,
                     child: Image.memory(
-                      photoBytes,
+                      staticCard.photoBytes,
                       width: double.infinity,
                       height: 260,
                       fit: BoxFit.cover,
                     ), // Widget that is blurred
                   ),
                   Image.memory(
-                    photoBytes,
+                    staticCard.photoBytes,
                     height: 260,
                     fit: BoxFit.fitHeight,
                     repeat: ImageRepeat.repeatX,
@@ -293,7 +280,7 @@ class BackCard extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    word,
+                    staticCard.term,
                     style: const TextStyle(
                       color: Colors.black,
                       fontSize: 24,
@@ -310,7 +297,7 @@ class BackCard extends StatelessWidget {
                     );
 
                     int soundId = await pool.load(
-                      wordAudioBytes.buffer.asByteData(),
+                      staticCard.termAudioBytes.buffer.asByteData(),
                     );
                     await pool.play(soundId);
                   },
@@ -366,7 +353,7 @@ class BackCard extends StatelessWidget {
                             );
 
                             int soundId = await pool.load(
-                              meaningAudioBytes.buffer.asByteData(),
+                              staticCard.meaningAudioBytes.buffer.asByteData(),
                             );
                             await pool.play(soundId);
                           },
@@ -383,7 +370,7 @@ class BackCard extends StatelessWidget {
                         ),
                       ),
                       child: MarkdownBody(
-                        data: meaning,
+                        data: staticCard.meaning,
                       ),
                     ),
                     const SizedBox(height: 15),
@@ -407,7 +394,7 @@ class BackCard extends StatelessWidget {
                             );
 
                             int soundId = await pool.load(
-                              exampleAudioBytes.buffer.asByteData(),
+                              staticCard.exampleAudioBytes.buffer.asByteData(),
                             );
                             await pool.play(soundId);
                           },
@@ -424,7 +411,7 @@ class BackCard extends StatelessWidget {
                         ),
                       ),
                       child: MarkdownBody(
-                        data: example,
+                        data: staticCard.example,
                       ),
                     ),
                     const SizedBox(height: 10),
@@ -463,7 +450,7 @@ class BackCard extends StatelessWidget {
                     minimumSize: Size.zero,
                   ),
                   onPressed: () {
-                    HomeController.to.isCardBackSide.value = false;
+                    HomeController.to.currentCardIndex.value++;
                   },
                 ),
                 const SizedBox(width: 10),
