@@ -10,6 +10,9 @@ abstract class Routes {
   static const NOT_FOUND = _Paths.NOT_FOUND;
   static const SETTINGS = _Paths.SETTINGS;
   static const STATS = _Paths.STATS;
+  static const PROGRESS = _Paths.HOME + _Paths.PROGRESS;
+  static const LEARNING = _Paths.HOME + _Paths.LEARNING;
+  static const PROFILE = _Paths.HOME + _Paths.PROFILE;
 }
 
 abstract class _Paths {
@@ -19,4 +22,7 @@ abstract class _Paths {
   static const NOT_FOUND = '/not-found';
   static const SETTINGS = '/settings';
   static const STATS = '/stats';
+  static const PROGRESS = '/progress';
+  static const LEARNING = '/learning';
+  static const PROFILE = '/profile';
 }

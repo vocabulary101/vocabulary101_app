@@ -43,6 +43,7 @@ const TextTheme textTheme = TextTheme(
     fontSize: 14,
     fontWeight: FontWeight.w500,
     letterSpacing: .20,
+    height: 1.6,
   ),
   bodyText1: TextStyle(
     fontSize: 16,

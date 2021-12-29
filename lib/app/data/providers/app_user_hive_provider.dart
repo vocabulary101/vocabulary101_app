@@ -8,12 +8,14 @@ class AppUserHiveProvider extends AppUserService {
   // Hive box instance
   late Box _hiveBox;
 
+  @override
   Future<void> initProvider() async {
     // Get Hive box instance
     _hiveBox = Hive.box('users');
   }
 
   ///
+  @override
   Future<AppUser?> byId(String id) async {
     final boxValue = _hiveBox.get(id);
     return boxValue != null
@@ -22,6 +24,7 @@ class AppUserHiveProvider extends AppUserService {
   }
 
   ///
+  @override
   Stream<AppUser?> watchById(String id) async* {
     // Get value to the first yield from the storage
     var firstYieldValue = _hiveBox.get(id);
@@ -43,16 +46,19 @@ class AppUserHiveProvider extends AppUserService {
   }
 
   ///
+  @override
   Future<void> add(AppUser user) async {
     await _hiveBox.put(user.id, user.toJson());
   }
 
   ///
+  @override
   Future<void> update(AppUser user) async {
     await _hiveBox.put(user.id, user.toJson());
   }
 
   ///
+  @override
   Future<void> removeById(String id) async {
     await _hiveBox.delete(id);
   }

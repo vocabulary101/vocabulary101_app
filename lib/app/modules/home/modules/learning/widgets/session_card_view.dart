@@ -5,7 +5,9 @@ import 'package:get/get.dart';
 import 'package:soundpool/soundpool.dart';
 
 import 'package:vocabulary101_app/app/core/icons/v101_icons.dart';
+import 'package:vocabulary101_app/app/data/models/session_card.dart';
 import 'package:vocabulary101_app/app/modules/home/controllers/home_controller.dart';
+import 'package:vocabulary101_app/app/modules/home/modules/learning/widgets/session_progress_linear_indicator.dart';
 import 'package:vocabulary101_app/app/widgets/circle_icon_button.dart';
 
 class SessionCardView extends StatelessWidget {
@@ -60,7 +62,11 @@ class FrontCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final staticCard = HomeController.to.currentStaticCard.value!;
+    final homeCtrl = HomeController.to;
+
+    final staticCard = homeCtrl.currentStaticCard.value!;
+    final currentSessionCard = homeCtrl
+        .currentLearningSession.value!.cards[homeCtrl.currentCardIndex.value];
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 6),
@@ -69,35 +75,30 @@ class FrontCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            width: double.infinity,
-            height: 5,
-            decoration: BoxDecoration(
-              color: const Color(0xFFE3E3E3),
-              borderRadius: BorderRadius.circular(3),
-            ),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Container(
-                width: 70,
-                height: 5,
-                decoration: BoxDecoration(
-                  color: const Color(0xFF4D8EDA),
-                  borderRadius: BorderRadius.circular(3),
-                ),
-              ),
-            ),
-          ),
+          const SessionProgressLinearIndicator(),
           const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                'This card is hard for you',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 15,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const Text(
+                    'This card is ',
+                    style: TextStyle(fontSize: 15),
+                  ),
+                  Text(
+                    '"${currentSessionCard.getStatusAsString()}"',
+                    style: TextStyle(
+                      color: currentSessionCard.getStatusColor(),
+                      fontSize: 15,
+                    ),
+                  ),
+                  const Text(
+                    ' for you',
+                    style: TextStyle(fontSize: 15),
+                  ),
+                ],
               ),
               IconButton(
                 icon: const Icon(V101Icons.more_vert),
@@ -244,25 +245,8 @@ class BackCard extends StatelessWidget {
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
                   children: [
-                    Expanded(
-                      child: Container(
-                        height: 5,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFE3E3E3).withOpacity(.5),
-                          borderRadius: BorderRadius.circular(3),
-                        ),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Container(
-                            width: 70,
-                            height: 5,
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF4D8EDA).withOpacity(.6),
-                              borderRadius: BorderRadius.circular(3),
-                            ),
-                          ),
-                        ),
-                      ),
+                    const Expanded(
+                      child: SessionProgressLinearIndicator(opacity: .5),
                     ),
                     IconButton(
                       icon: const Icon(V101Icons.more_vert),
@@ -450,7 +434,13 @@ class BackCard extends StatelessWidget {
                     minimumSize: Size.zero,
                   ),
                   onPressed: () {
-                    HomeController.to.currentCardIndex.value++;
+                    final homeCtrl = HomeController.to;
+
+                    // Change SessionCard status
+                    homeCtrl.setLearningSessionCardStatus(LearningStatus.again);
+
+                    // Go to the next card
+                    homeCtrl.currentCardIndex.value++;
                   },
                 ),
                 const SizedBox(width: 10),
@@ -476,7 +466,13 @@ class BackCard extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    HomeController.to.isCardBackSide.value = false;
+                    final homeCtrl = HomeController.to;
+
+                    // Change SessionCard status
+                    homeCtrl.setLearningSessionCardStatus(LearningStatus.hard);
+
+                    // Go to the next card
+                    homeCtrl.currentCardIndex.value++;
                   },
                 ),
                 const SizedBox(width: 10),
@@ -502,7 +498,13 @@ class BackCard extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    HomeController.to.isCardBackSide.value = false;
+                    final homeCtrl = HomeController.to;
+
+                    // Change SessionCard status
+                    homeCtrl.setLearningSessionCardStatus(LearningStatus.good);
+
+                    // Go to the next card
+                    homeCtrl.currentCardIndex.value++;
                   },
                 ),
                 const SizedBox(width: 10),
@@ -528,7 +530,13 @@ class BackCard extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    HomeController.to.isCardBackSide.value = false;
+                    final homeCtrl = HomeController.to;
+
+                    // Change SessionCard status
+                    homeCtrl.setLearningSessionCardStatus(LearningStatus.easy);
+
+                    // Go to the next card
+                    homeCtrl.currentCardIndex.value++;
                   },
                 ),
               ],

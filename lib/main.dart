@@ -26,7 +26,6 @@ void main() async {
     // Directory appDocDir = await getApplicationDocumentsDirectory();
     Directory appDocDir = await getApplicationSupportDirectory();
     String appDocPath = appDocDir.path;
-    print(appDocPath);
 
     await Hive.openBox('users', path: appDocPath);
     await Hive.openBox('staticCardsCache', path: appDocPath);
@@ -54,8 +53,8 @@ void main() async {
   runApp(
     GetMaterialApp.router(
       title: GetPlatform.isWeb
-          ? 'English Vocabulary - Vocabulary101'
-          : 'Vocabulary101',
+          ? 'English Vocabulary - Vocabulary 101'
+          : 'Vocabulary 101',
       getPages: AppPages.routes,
       unknownRoute: AppPages.routes.firstWhere(
         (p) => p.name == Routes.NOT_FOUND,

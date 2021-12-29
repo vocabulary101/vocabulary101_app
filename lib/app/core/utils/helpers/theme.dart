@@ -7,7 +7,7 @@ class ThemeHelper {
       SystemUiOverlayStyle(
         statusBarColor: isDarkMode
             ? ThemeData.dark().scaffoldBackgroundColor
-            : Color(0xfff7f7f7), // status bar color
+            : const Color(0xfff7f7f7), // status bar color
         statusBarBrightness: isDarkMode
             ? Brightness.dark
             : Brightness.light, //status bar brigtness

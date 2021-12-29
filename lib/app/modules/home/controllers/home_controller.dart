@@ -13,8 +13,9 @@ class HomeController extends GetxController {
   // Subscriptions and repositories variables
   //
 
-  StreamSubscription? _appUserSubscription;
+  // StreamSubscription? _appUserSubscription;
   StreamSubscription? _learningSessionSubscription;
+  StreamSubscription? _progressVocabularySubscription;
 
   final HomeRepository homeRepository = HomeRepository();
 
@@ -22,14 +23,21 @@ class HomeController extends GetxController {
   // General ui variables
   //
 
-  var bottomNavigationBarIndex = 0.obs;
+  // var bottomNavigationBarIndex = 0.obs;
 
   //
-  // Content variables
+  // Progress View variables
   //
 
-  // Reactive current Library instance
-  Rxn<LearningSession> currentLearningSession = Rxn<LearningSession>();
+  // Reactive user SessionCard list
+  var userSessionCards = <SessionCard>[].obs;
+
+  //
+  // Learning View variables
+  //
+
+  // Reactive current LearningSession instance
+  var currentLearningSession = Rxn<LearningSession>();
 
   var currentCardIndex = (-1).obs;
   var currentStaticCard = Rxn<StaticCard>();
@@ -44,6 +52,9 @@ class HomeController extends GetxController {
 
     ever(currentCardIndex, _handleCardIndexChanges);
 
+    // Load user session cards, that is, user progress (subscription)
+    await _loadProgressVocabulary();
+
     // Load current learning session (subscription)
     await _loadLearningSession();
   }
@@ -57,6 +68,20 @@ class HomeController extends GetxController {
   // void onClose() {
   //   super.onClose();
   // }
+
+  //
+  Future<void> _loadProgressVocabulary() async {
+    //
+    await _progressVocabularySubscription?.cancel();
+
+    _progressVocabularySubscription =
+        homeRepository.watchUserSessionCards().listen(
+      (sessionCards) async {
+        // Set new value and refresh view
+        userSessionCards.value = sessionCards;
+      },
+    );
+  }
 
   //
   Future<void> _loadLearningSession() async {
@@ -80,7 +105,13 @@ class HomeController extends GetxController {
   }
 
   Future<void> startLearningSession() async {
-    const maxStaticCardId = -1;
+    var maxStaticCardId = -1;
+    for (var sc in userSessionCards) {
+      final sCardId = int.parse(sc.id.substring(2));
+      if (sCardId > maxStaticCardId) {
+        maxStaticCardId = sCardId;
+      }
+    }
 
     List<SessionCard> cards = [];
 
@@ -107,6 +138,7 @@ class HomeController extends GetxController {
       cards.add(
         SessionCard(
           id: 'en' + (maxStaticCardId + i).toString(),
+          term: '',
           status: LearningStatus.undefined,
           lastUpdateAt: DateTime.now(),
         ),
@@ -124,19 +156,39 @@ class HomeController extends GetxController {
     currentCardIndex.value = 0;
   }
 
+  void setLearningSessionCardStatus(LearningStatus status) {
+    for (int i = 0; i < currentLearningSession.value!.cards.length; i++) {
+      var scard = currentLearningSession.value!.cards[i];
+      if (scard.id == 'en' + currentStaticCard.value!.id) {
+        currentLearningSession.value!.cards[i] = scard.copyWith(
+          term: currentStaticCard.value!.term,
+          status: status,
+          lastUpdateAt: DateTime.now().toUtc(),
+        );
+      }
+    }
+  }
+
   Future<void> cancelLearningSession() async {
+    // Delete current Learning Session
     await homeRepository.removeLearningSessionById('local');
   }
 
   Future<void> finishLearningSession() async {
     // Save session cards
-    // ...
-
+    for (var sessionCard in currentLearningSession.value!.cards) {
+      // If term is not empty, it has at least one user interaction
+      if (sessionCard.term != '') {
+        // Add or replace
+        await homeRepository.addSessionCard(sessionCard);
+      }
+    }
+    // Delete current Learning Session
     await homeRepository.removeLearningSessionById('local');
   }
 
   void _handleCardIndexChanges(index) async {
-    print('Index: $index');
+    // print('Index: $index');
     // If is a valid index
     if (index >= 0 && index < currentLearningSession.value!.cards.length) {
       // Reset card side

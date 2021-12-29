@@ -20,7 +20,16 @@ class NoLearningSessionMsg extends StatelessWidget {
           children: [
             Text(
               'No Learning Session',
-              style: Get.textTheme.headline6,
+              style: Get.textTheme.headline5,
+            ),
+            const SizedBox(height: 25),
+            ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 300),
+              child: Text(
+                'That is, a set of 10 new word cards with their meanings and examples.',
+                style: Get.textTheme.subtitle2,
+                textAlign: TextAlign.center,
+              ),
             ),
             const SizedBox(height: 30),
             OutlinedButton(

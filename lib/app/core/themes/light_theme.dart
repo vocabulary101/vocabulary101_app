@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:vocabulary101_app/app/core/themes/text_theme.dart';
 
 class LightTheme {
+  // static const _primaryColor = Color(0xFF5E4FD5);
+  static const _primaryColor = Colors.blueAccent;
+
   static ThemeData data = ThemeData(
     brightness: Brightness.light,
     visualDensity: VisualDensity.compact,
@@ -30,15 +33,15 @@ class LightTheme {
     //   labelColor: Colors.black,
     //   unselectedLabelColor: Colors.black87,
     // ),
-    // bottomNavigationBarTheme: BottomNavigationBarThemeData(
-    //   unselectedItemColor: Colors.black87,
-    //   selectedItemColor: Colors.blue.shade900,
-    //   backgroundColor: Colors.white,
-    //   elevation: 0,
-    //   showUnselectedLabels: false,
-    //   showSelectedLabels: false,
-    //   type: BottomNavigationBarType.fixed,
-    // ),
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+      unselectedItemColor: Colors.black87,
+      selectedItemColor: _primaryColor,
+      backgroundColor: Colors.white,
+      elevation: 0,
+      showUnselectedLabels: false,
+      showSelectedLabels: false,
+      type: BottomNavigationBarType.fixed,
+    ),
     // dividerColor: Colors.black12,
     // tooltipTheme: TooltipThemeData(
     //   padding: const EdgeInsets.all(12),

@@ -8,8 +8,9 @@ part of 'session_card.dart';
 
 SessionCard _$SessionCardFromJson(Map<String, dynamic> json) => SessionCard(
       id: json['id'] as String,
+      term: json['b'] as String,
       status: SessionCard._learningStatusFromJson(json['a'] as int),
-      lastUpdateAt: DateTime.parse(json['b'] as String),
+      lastUpdateAt: DateTime.parse(json['c'] as String),
     );
 
 Map<String, dynamic> _$SessionCardToJson(SessionCard instance) {
@@ -24,6 +25,7 @@ Map<String, dynamic> _$SessionCardToJson(SessionCard instance) {
   }
 
   writeNotNull('a', SessionCard._learningStatusToJson(instance.status));
-  val['b'] = instance.lastUpdateAt.toIso8601String();
+  val['b'] = instance.term;
+  val['c'] = instance.lastUpdateAt.toIso8601String();
   return val;
 }

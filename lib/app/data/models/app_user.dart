@@ -71,16 +71,15 @@ class AppUser extends Equatable {
     required this.activated,
   });
 
-  AppUser.minimum({required String id})
-      : id = id,
-        name = null,
+  AppUser.minimum({required this.id})
+      : name = null,
         photoUrl = null,
         email = null,
         lang = 'sys',
         theme = 'sys',
         customThemeColor = null,
         signUpAt = DateTime.now().toUtc(),
-        config = AppUserConfig.minimum(),
+        config = const AppUserConfig.minimum(),
         activated = true;
 
   @override
@@ -145,7 +144,7 @@ class AppUser extends Equatable {
   //   return _$AppUserFromJson(json);
   // }
 
-  Map<String, dynamic> toDocument() => this.toJson()..remove('id');
+  Map<String, dynamic> toDocument() => toJson()..remove('id');
 
   // Map<String, dynamic> toFirestoreDocument() {
   //   Map<String, dynamic> doc = this.toDocument();
@@ -171,11 +170,11 @@ class AppUserConfig extends Equatable {
   )
   final bool avoidInstallMobileAppMsg;
 
-  AppUserConfig({
+  const AppUserConfig({
     required this.avoidInstallMobileAppMsg,
   });
 
-  AppUserConfig.minimum() : avoidInstallMobileAppMsg = false;
+  const AppUserConfig.minimum() : avoidInstallMobileAppMsg = false;
 
   @override
   List<Object> get props => [
