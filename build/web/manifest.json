@@ -1,11 +1,11 @@
 {
-    "name": "vocabulary101_app",
-    "short_name": "vocabulary101_app",
+    "name": "Vocabulary 101",
+    "short_name": "Vocabulary 101",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "Learn new words every day with Vocabulary101, and improve your English language skills.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
