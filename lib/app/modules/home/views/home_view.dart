@@ -30,8 +30,10 @@ class HomeView extends GetView<HomeController> {
           initialRoute: Routes.LEARNING,
           key: Get.nestedKey(Routes.HOME),
         ),
-        bottomNavigationBar: HomeBottomNavigationBar(
-          index: currentIndex,
+        bottomNavigationBar: Obx(
+          () => HomeController.to.isVideoRecordingMode.value
+              ? Container(height: 1)
+              : HomeBottomNavigationBar(index: currentIndex),
         ),
       );
     });

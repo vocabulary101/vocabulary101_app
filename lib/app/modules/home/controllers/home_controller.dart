@@ -23,6 +23,8 @@ class HomeController extends GetxController {
   // General ui variables
   //
 
+  var isVideoRecordingMode = false.obs;
+
   // var bottomNavigationBarIndex = 0.obs;
 
   //

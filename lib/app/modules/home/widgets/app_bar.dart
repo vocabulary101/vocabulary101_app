@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vocabulary101_app/app/core/icons/v101_icons.dart';
+import 'package:vocabulary101_app/app/modules/home/controllers/home_controller.dart';
 import 'package:vocabulary101_app/app/widgets/circle_icon_button.dart';
 
 class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -27,14 +28,19 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
           border: Border.all(color: const Color(0xFFECECEC), width: 1),
         ),
       ),
-      title: Text(
-        index == 0
-            ? 'Your Vocabulary'
-            : (index == 1 ? 'Learning Session' : 'Profile'),
-        style: const TextStyle(
-          color: Colors.black,
-          fontSize: 20,
+      title: GestureDetector(
+        child: Text(
+          index == 0
+              ? 'Your Vocabulary'
+              : (index == 1 ? 'Learning Session' : 'Profile'),
+          style: const TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+          ),
         ),
+        onLongPress: () {
+          HomeController.to.isVideoRecordingMode.value = true;
+        },
       ),
       centerTitle: true,
       actions: [
