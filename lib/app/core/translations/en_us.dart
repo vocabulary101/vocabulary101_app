@@ -1,3 +1,4 @@
+// ignore: constant_identifier_names
 const Map<String, String> en_US = {
   //
   // Auth module texts

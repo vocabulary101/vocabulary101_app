@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:vocabulary101_app/app/core/themes/text_theme.dart';
 
 class LightTheme {
-  // static const _primaryColor = Color(0xFF5E4FD5);
-  static const _primaryColor = Colors.blueAccent;
+  static const _primaryColor = Color(0xFF8462C1);
+  // static const _primaryColor = Colors.blueAccent;
 
   static ThemeData data = ThemeData(
     brightness: Brightness.light,
     visualDensity: VisualDensity.compact,
     scaffoldBackgroundColor: const Color(0xFFF9F9F9),
-    primaryColor: Colors.blueAccent,
+    primaryColor: _primaryColor,
     fontFamily: 'Montserrat',
     textTheme: textTheme.copyWith(
         // headline2: textTheme.headline2!.copyWith(
