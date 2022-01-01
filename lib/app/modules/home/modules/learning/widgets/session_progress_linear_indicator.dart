@@ -31,9 +31,7 @@ class SessionProgressLinearIndicator extends StatelessWidget {
                 child: Container(
                   height: 5,
                   decoration: BoxDecoration(
-                    color: const Color(0xFF4D8EDA).withOpacity(
-                      opacity + .2 <= 1 ? opacity + .2 : 1,
-                    ),
+                    color: const Color(0xFF4D8EDA),
                     borderRadius: BorderRadius.circular(3),
                   ),
                 ),

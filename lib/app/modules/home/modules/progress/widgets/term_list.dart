@@ -24,33 +24,44 @@ class ProgressTermList extends StatelessWidget {
                 Center(
                   child: Container(
                     constraints: const BoxConstraints(maxWidth: 800),
-                    child: ListTile(
-                      leading: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Icon(
-                            V101Icons.card_list,
-                            color: sessionCard.getStatusColor(),
+                    child: Column(
+                      children: [
+                        ListTile(
+                          leading: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const SizedBox(height: 5),
+                              Icon(
+                                V101Icons.viewed_card,
+                                color: sessionCard.getStatusColor(),
+                              ),
+                              const SizedBox(height: 7),
+                              Text(
+                                sessionCard.getStatusAsString().toUpperCase(),
+                                style: TextStyle(
+                                  fontSize: 9,
+                                  color: sessionCard.getStatusColor(),
+                                ),
+                              ),
+                            ],
                           ),
-                          const SizedBox(height: 7),
-                          Text(
-                            sessionCard.getStatusAsString().toUpperCase(),
-                            style: TextStyle(
-                              fontSize: 9,
-                              color: sessionCard.getStatusColor(),
+                          title: Text(sessionCard.term),
+                          subtitle: Padding(
+                            padding: const EdgeInsets.only(top: 5),
+                            child: Text(
+                              sessionCard.lastUpdateAt
+                                  .subtract(const Duration(seconds: 1))
+                                  .relative(appendIfAfter: 'ago'),
                             ),
                           ),
-                        ],
-                      ),
-                      title: Text(sessionCard.term),
-                      subtitle: Padding(
-                        padding: const EdgeInsets.only(top: 5),
-                        child: Text(
-                          sessionCard.lastUpdateAt
-                              .subtract(const Duration(seconds: 1))
-                              .relative(appendIfAfter: 'ago'),
                         ),
-                      ),
+                        const Divider(
+                          thickness: 1,
+                          height: 1,
+                        ),
+                      ],
                     ),
                   ),
                 ),

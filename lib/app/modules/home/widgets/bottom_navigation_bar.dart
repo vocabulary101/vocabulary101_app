@@ -18,13 +18,6 @@ class HomeBottomNavigationBar extends StatelessWidget {
       height: 47,
       decoration: BoxDecoration(
         color: Get.theme.bottomNavigationBarTheme.backgroundColor,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(.1),
-            blurRadius: 2,
-            offset: const Offset(0, -1),
-          )
-        ],
       ),
       child: Center(
         child: ConstrainedBox(

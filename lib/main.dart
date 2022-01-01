@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:vocabulary101_app/app/controllers/app_user_controller.dart';
+import 'package:vocabulary101_app/app/core/services/translation_service.dart';
 import 'package:vocabulary101_app/app/core/themes/light_theme.dart';
 import 'package:vocabulary101_app/app/routes/app_pages.dart';
 
@@ -62,9 +63,9 @@ void main() async {
       theme: LightTheme.data,
       // darkTheme: DarkTheme.data,
       color: Colors.black,
-      // locale: TranslationService.locale,
-      // fallbackLocale: TranslationService.fallbackLocale,
-      // translations: TranslationService(),
+      locale: TranslationService.locale,
+      fallbackLocale: TranslationService.fallbackLocale,
+      translations: TranslationService(),
       debugShowCheckedModeBanner: false,
       // navigatorObservers: [
       //   FirebaseAnalyticsObserver(analytics: analytics),

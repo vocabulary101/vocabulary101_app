@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vocabulary101_app/app/core/icons/v101_icons.dart';
 import 'package:vocabulary101_app/app/modules/home/controllers/home_controller.dart';
+import 'package:vocabulary101_app/app/modules/home/widgets/functions/synchronization_dialog.dart';
 import 'package:vocabulary101_app/app/widgets/circle_icon_button.dart';
 
 class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -57,7 +58,9 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
             highlightColor: const Color(0xFF4D8EDA).withOpacity(.11),
             splashColor: const Color(0xFF4D8EDA).withOpacity(.14),
             focusColor: const Color(0xFF4D8EDA).withOpacity(.2),
-            onPressed: () async {},
+            onPressed: () async {
+              await synchronizationDialog();
+            },
           ),
         ),
       ],
