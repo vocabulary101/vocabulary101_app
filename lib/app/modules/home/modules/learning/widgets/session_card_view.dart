@@ -406,22 +406,25 @@ class BackCardTermHeader extends StatelessWidget {
           },
         ),
         const SizedBox(width: 8),
-        Container(
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(
-              color: Colors.black,
+        Tooltip(
+          message: 'Colors help',
+          child: Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: Colors.black,
+              ),
             ),
-          ),
-          child: IconButton(
-            icon: const Icon(V101Icons.help),
-            padding: const EdgeInsets.all(3),
-            iconSize: 16,
-            constraints: const BoxConstraints(minWidth: 1, minHeight: 1),
-            onPressed: () async {
-              // Show colors help dialog
-              await cardStatusColorsHelpDialog();
-            },
+            child: IconButton(
+              icon: const Icon(V101Icons.help),
+              padding: const EdgeInsets.all(3),
+              iconSize: 16,
+              constraints: const BoxConstraints(minWidth: 1, minHeight: 1),
+              onPressed: () async {
+                // Show colors help dialog
+                await cardStatusColorsHelpDialog();
+              },
+            ),
           ),
         ),
         const SizedBox(width: 5),

@@ -38,6 +38,13 @@ class HomeController extends GetxController {
   // Learning View variables
   //
 
+  // 'You have' section data variables
+  var numNewCards = 0.obs;
+  var numEasyCards = 0.obs;
+  var numAgainCards = 0.obs;
+  var numHardCards = 0.obs;
+  var numGoodCards = 0.obs;
+
   // Reactive current LearningSession instance
   var currentLearningSession = Rxn<LearningSession>();
 
@@ -81,8 +88,41 @@ class HomeController extends GetxController {
       (sessionCards) async {
         // Set new value and refresh view
         userSessionCards.value = sessionCards;
+
+        // Update 'You have' section data
+        _updateYouHaveSectionData();
       },
     );
+  }
+
+  void _updateYouHaveSectionData() {
+    // TEMP hardcoded value
+    const numTotalStaticCards = 3600;
+
+    // Reset values
+    numEasyCards.value = 0;
+    numAgainCards.value = 0;
+    numHardCards.value = 0;
+    numGoodCards.value = 0;
+
+    for (SessionCard sc in userSessionCards) {
+      if (sc.status == LearningStatus.easy) {
+        numEasyCards.value++;
+      } else if (sc.status == LearningStatus.good) {
+        numGoodCards.value++;
+      } else if (sc.status == LearningStatus.hard) {
+        numHardCards.value++;
+      } else if (sc.status == LearningStatus.again) {
+        numAgainCards.value++;
+      }
+    }
+
+    // Remaining new term cards
+    numNewCards.value = numTotalStaticCards -
+        numEasyCards.value -
+        numAgainCards.value -
+        numHardCards.value -
+        numGoodCards.value;
   }
 
   //

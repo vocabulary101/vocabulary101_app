@@ -14,6 +14,8 @@ class V101Icons {
 
   static const String _fontFamily = 'V101Icons';
 
+  static const IconData arrow_right_list =
+      IconData(0xe90a, fontFamily: _fontFamily);
   static const IconData close = IconData(0xe908, fontFamily: _fontFamily);
   static const IconData viewed_card = IconData(0xe909, fontFamily: _fontFamily);
   static const IconData more_vert = IconData(0xe904, fontFamily: _fontFamily);
